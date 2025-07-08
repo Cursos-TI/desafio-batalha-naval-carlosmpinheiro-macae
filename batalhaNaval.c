@@ -1,52 +1,88 @@
 #include <stdio.h>
 
-// Desafio Batalha Naval - Nível Aventureiro
-// Posiciona 4 navios em um tabuleiro 10x10, incluindo navios em diagonal.
+// Desafio Batalha Naval - Nível Mestre
+// Aplicação de habilidades especiais: Cone, Cruz e Octaedro
 
-int main() {
-    int tabuleiro[10][10];
+#define TAMANHO 10 // Tamanho do tabuleiro
 
-    // Inicializa o tabuleiro com água (0)
-    for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 10; j++) {
-            tabuleiro[i][j] = 0;
-        }
-    }
-
-    int tamanhoNavio = 3;
-
-    // Navio 1 – horizontal (linha 1, coluna 2 a 4)
-    int linhaH = 1, colunaH = 2;
-    for (int i = 0; i < tamanhoNavio; i++) {
-        tabuleiro[linhaH][colunaH + i] = 3;
-    }
-
-    // Navio 2 – vertical (linha 5 a 7, coluna 0)
-    int linhaV = 5, colunaV = 0;
-    for (int i = 0; i < tamanhoNavio; i++) {
-        tabuleiro[linhaV + i][colunaV] = 3;
-    }
-
-    // Navio 3 – diagonal principal (linha 6, coluna 6 → [6][6], [7][7], [8][8])
-    int linhaD1 = 6, colunaD1 = 6;
-    for (int i = 0; i < tamanhoNavio; i++) {
-        tabuleiro[linhaD1 + i][colunaD1 + i] = 3;
-    }
-
-    // Navio 4 – diagonal secundária (linha 0, coluna 9 → [0][9], [1][8], [2][7])
-    int linhaD2 = 0, colunaD2 = 9;
-    for (int i = 0; i < tamanhoNavio; i++) {
-        tabuleiro[linhaD2 + i][colunaD2 - i] = 3;
-    }
-
-    // Exibe o tabuleiro completo
-    printf("Tabuleiro 10x10:\n");
-    for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 10; j++) {
+// Função para exibir o tabuleiro
+void exibirTabuleiro(int tabuleiro[TAMANHO][TAMANHO]) {
+    printf("Tabuleiro com habilidades especiais:\n");
+    for (int i = 0; i < TAMANHO; i++) {
+        for (int j = 0; j < TAMANHO; j++) {
             printf("%d ", tabuleiro[i][j]);
         }
         printf("\n");
     }
+}
+
+// Função para aplicar matriz de habilidade no tabuleiro
+void aplicarHabilidade(int tabuleiro[TAMANHO][TAMANHO], int habilidade[5][5], int origemLinha, int origemColuna) {
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            int linha = origemLinha - 2 + i;
+            int coluna = origemColuna - 2 + j;
+
+            // Condicional para evitar posições fora do tabuleiro
+            if (linha >= 0 && linha < TAMANHO && coluna >= 0 && coluna < TAMANHO) {
+                if (habilidade[i][j] == 1) {
+                    tabuleiro[linha][coluna] = 5; // Marca área afetada com 5
+                }
+            }
+        }
+    }
+}
+
+int main() {
+    int tabuleiro[TAMANHO][TAMANHO];
+
+    // Inicializa o tabuleiro com 0
+    for (int i = 0; i < TAMANHO; i++) {
+        for (int j = 0; j < TAMANHO; j++) {
+            tabuleiro[i][j] = 0;
+        }
+    }
+
+    // Matriz Cone (5x5)
+    int cone[5][5];
+    for (int i = 0; i < 5; i++) {          // Linha
+        for (int j = 0; j < 5; j++) {      // Coluna
+            if (j >= 2 - i && j <= 2 + i)  // Expande horizontalmente conforme a linha
+                cone[i][j] = 1;
+            else
+                cone[i][j] = 0;
+        }
+    }
+
+    // Matriz Cruz (5x5)
+    int cruz[5][5];
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            if (i == 2 || j == 2)
+                cruz[i][j] = 1;
+            else
+                cruz[i][j] = 0;
+        }
+    }
+
+    // Matriz Octaedro (5x5)
+    int octaedro[5][5];
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            if (abs(i - 2) + abs(j - 2) <= 2)
+                octaedro[i][j] = 1;
+            else
+                octaedro[i][j] = 0;
+        }
+    }
+
+    // Aplica as habilidades em pontos específicos
+    aplicarHabilidade(tabuleiro, cone, 2, 2);       // Cone com origem em [2][2]
+    aplicarHabilidade(tabuleiro, cruz, 5, 5);       // Cruz com origem em [5][5]
+    aplicarHabilidade(tabuleiro, octaedro, 7, 8);   // Octaedro com origem em [7][8]
+
+    // Exibe o tabuleiro final com áreas afetadas
+    exibirTabuleiro(tabuleiro);
 
     return 0;
 }
