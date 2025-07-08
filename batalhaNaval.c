@@ -1,49 +1,51 @@
 #include <stdio.h>
 
-// Desafio Batalha Naval - Nível Novato
-// Este programa posiciona dois navios em um tabuleiro 5x5:
-// Um navio na vertical e outro na horizontal.
+// Desafio Batalha Naval - Nível Aventureiro
+// Posiciona 4 navios em um tabuleiro 10x10, incluindo navios em diagonal.
 
 int main() {
-    // Cria o tabuleiro 5x5 e inicializa todas as posições com 0 (água)
-    int tabuleiro[5][5];
-    
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 5; j++) {
+    int tabuleiro[10][10];
+
+    // Inicializa o tabuleiro com água (0)
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 10; j++) {
             tabuleiro[i][j] = 0;
         }
     }
 
-    // Posição inicial do navio horizontal
-    int linhaH = 2;
-    int colunaH = 1;
-
-    // Posição inicial do navio vertical
-    int linhaV = 0;
-    int colunaV = 4;
-
-    // Tamanho fixo dos navios
     int tamanhoNavio = 3;
 
-    // Posiciona o navio horizontalmente (valor 3 representa navio)
+    // Navio 1 – horizontal (linha 1, coluna 2 a 4)
+    int linhaH = 1, colunaH = 2;
     for (int i = 0; i < tamanhoNavio; i++) {
         tabuleiro[linhaH][colunaH + i] = 3;
     }
 
-    // Posiciona o navio verticalmente
+    // Navio 2 – vertical (linha 5 a 7, coluna 0)
+    int linhaV = 5, colunaV = 0;
     for (int i = 0; i < tamanhoNavio; i++) {
         tabuleiro[linhaV + i][colunaV] = 3;
     }
 
-    // Exibe as coordenadas dos navios
-    printf("Coordenadas do navio horizontal:\n");
+    // Navio 3 – diagonal principal (linha 6, coluna 6 → [6][6], [7][7], [8][8])
+    int linhaD1 = 6, colunaD1 = 6;
     for (int i = 0; i < tamanhoNavio; i++) {
-        printf("Linha: %d, Coluna: %d\n", linhaH, colunaH + i);
+        tabuleiro[linhaD1 + i][colunaD1 + i] = 3;
     }
 
-    printf("\nCoordenadas do navio vertical:\n");
+    // Navio 4 – diagonal secundária (linha 0, coluna 9 → [0][9], [1][8], [2][7])
+    int linhaD2 = 0, colunaD2 = 9;
     for (int i = 0; i < tamanhoNavio; i++) {
-        printf("Linha: %d, Coluna: %d\n", linhaV + i, colunaV);
+        tabuleiro[linhaD2 + i][colunaD2 - i] = 3;
+    }
+
+    // Exibe o tabuleiro completo
+    printf("Tabuleiro 10x10:\n");
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 10; j++) {
+            printf("%d ", tabuleiro[i][j]);
+        }
+        printf("\n");
     }
 
     return 0;
